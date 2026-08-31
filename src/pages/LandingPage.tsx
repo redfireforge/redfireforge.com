@@ -717,6 +717,32 @@ function FaqSection() {
   );
 }
 
+const WAITLIST_URL = 'https://tally.so/r/lbErXW';
+
+function WaitlistCta() {
+  return (
+    <section className="lp-section lp-waitlist">
+      <div className="lp-wrap waitlist-inner">
+        <div className="waitlist-badge">Coming soon</div>
+        <h2 className="waitlist-heading">RedfireForge Cloud</h2>
+        <p className="waitlist-sub">
+          Run load tests from globally distributed nodes, share collections with your team,
+          and manage environments without leaving the browser — no desktop required.
+        </p>
+        <a
+          href={WAITLIST_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="lp-btn lp-btn-primary lp-btn-lg waitlist-btn"
+        >
+          Join the waitlist →
+        </a>
+        <p className="waitlist-note">No spam. One email when it launches.</p>
+      </div>
+    </section>
+  );
+}
+
 function FinalCta() {
   const { detected, primaryUrl } = useLatestRelease();
   const mainHref = primaryUrl ?? `${GITHUB_RELEASES}/latest`;
@@ -812,6 +838,7 @@ export function LandingPage() {
       <CliSection />
       <DownloadSection />
       <FaqSection />
+      <WaitlistCta />
       <FinalCta />
       <SiteFooter />
     </>

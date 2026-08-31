@@ -1043,3 +1043,71 @@
     overflow-x: auto;
   }
 }
+
+/* ── Waitlist CTA ─────────────────────────────────────────── */
+.lp-waitlist {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, #3b82f6 8%, var(--bg)) 0%,
+    color-mix(in srgb, #6366f1 6%, var(--bg)) 100%);
+  border-top: 1px solid color-mix(in srgb, #3b82f6 20%, var(--border));
+  border-bottom: 1px solid color-mix(in srgb, #3b82f6 20%, var(--border));
+}
+
+.waitlist-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 80px 24px;
+}
+
+.waitlist-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, #6366f1 18%, transparent);
+  border: 1px solid color-mix(in srgb, #6366f1 40%, transparent);
+  color: #a5b4fc;
+}
+
+.waitlist-heading {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin: 0;
+}
+
+.waitlist-sub {
+  max-width: 540px;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.waitlist-btn {
+  margin-top: 8px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border: none;
+  font-size: 1rem;
+  padding: 14px 32px;
+}
+
+.waitlist-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+}
+
+.waitlist-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.65;
+  margin: 0;
+}
