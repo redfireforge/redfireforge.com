@@ -632,8 +632,16 @@ function DownloadSection() {
           </a>
         </div>
 
+        <div className="homebrew-card lp-homebrew">
+          <span className="homebrew-icon" aria-hidden>🍺</span>
+          <div className="homebrew-body">
+            <p className="homebrew-title">Homebrew (macOS) — bypasses Gatekeeper</p>
+            <pre className="homebrew-cmd">{'brew tap redfireforge/tap\nbrew install --cask redfireforge'}</pre>
+          </div>
+        </div>
+
         <div className="macos-gatekeeper-note">
-          <strong>macOS first launch:</strong> Gatekeeper will block the app until it is notarized. Run once in Terminal after installing:
+          <strong>Direct download:</strong> If you install the <code>.dmg</code> manually, run once in Terminal:
           <pre className="xattr-cmd">xattr -cr /Applications/RedfireForge.app</pre>
           Then open the app normally. One time only.
         </div>

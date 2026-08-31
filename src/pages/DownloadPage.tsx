@@ -129,6 +129,14 @@ export function DownloadPage() {
               </div>
             </section>
 
+            <div className="homebrew-card">
+              <span className="homebrew-icon" aria-hidden>🍺</span>
+              <div className="homebrew-body">
+                <p className="homebrew-title">Homebrew (macOS) — bypasses Gatekeeper</p>
+                <pre className="homebrew-cmd">brew tap redfireforge/tap{'\n'}brew install --cask redfireforge</pre>
+              </div>
+            </div>
+
             <h2 className="sec-title">Also available for</h2>
             <div className="plat-grid">
               {otherPlatforms.map((p) => {

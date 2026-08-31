@@ -227,6 +227,52 @@ a {
   color: var(--text-muted);
 }
 
+/* ── homebrew card ── */
+.homebrew-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: color-mix(in srgb, #f97316 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, #f97316 30%, var(--border));
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 24px auto 0;
+  max-width: 36rem;
+  text-align: left;
+}
+
+.homebrew-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.homebrew-body {
+  flex: 1;
+}
+
+.homebrew-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.homebrew-cmd {
+  display: block;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: #f97316;
+  user-select: all;
+  cursor: text;
+  white-space: pre;
+  margin: 0;
+}
+
 .macos-note {
   margin-top: 18px;
   font-size: 0.78rem;
