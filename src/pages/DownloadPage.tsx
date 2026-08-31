@@ -219,13 +219,7 @@ export function DownloadPage() {
               </div>
             </details>
 
-            <p className="footer-link">
-              <a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">
-                View all releases on GitHub →
-              </a>
-            </p>
-
-            {/* Learning Hub Edition */}
+            {/* Learning Hub Edition — placed before details so it stays visible */}
             <section className="lh-section">
               <div className="lh-header">
                 <span className="lh-badge">Learning Hub Edition</span>
@@ -272,6 +266,12 @@ export function DownloadPage() {
                 </p>
               )}
             </section>
+
+            <p className="footer-link">
+              <a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">
+                View all releases on GitHub →
+              </a>
+            </p>
           </>
         )}
       </main>
