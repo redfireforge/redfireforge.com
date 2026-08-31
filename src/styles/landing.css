@@ -829,6 +829,12 @@
   text-decoration: underline;
 }
 
+/* macOS Gatekeeper note — shared between landing and download page */
+.lp-download .macos-gatekeeper-note {
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
 /* ── faq ────────────────────────────────────────────────── */
 .faq-list {
   max-width: 780px;

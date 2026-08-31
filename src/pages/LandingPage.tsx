@@ -51,6 +51,7 @@ function LandingNav() {
           <a href="#compare">Compare</a>
           <a href="#surfaces">Web vs Desktop</a>
           <a href="#cli">CLI</a>
+          <Link to="/contact">Contact</Link>
         </div>
         <div className="nav-cta">
           <a href={GITHUB_REPO} className="lp-btn lp-btn-ghost lp-btn-sm" target="_blank" rel="noopener noreferrer">
@@ -629,6 +630,12 @@ function DownloadSection() {
           >
             ⌨️ CLI via npm
           </a>
+        </div>
+
+        <div className="macos-gatekeeper-note">
+          <strong>macOS first launch:</strong> Gatekeeper will block the app until it is notarized. Run once in Terminal after installing:
+          <pre className="xattr-cmd">xattr -cr /Applications/RedfireForge.app</pre>
+          Then open the app normally. One time only.
         </div>
 
         <p className="dl-meta-links">

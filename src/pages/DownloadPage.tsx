@@ -121,6 +121,12 @@ export function DownloadPage() {
                 On macOS we show both Apple Silicon and Intel below — pick the one that matches your Mac
                 (detection can be wrong under Rosetta).
               </p>
+              <div className="macos-gatekeeper-note">
+                <strong>macOS first launch:</strong> Apple Gatekeeper will block the app because it is not yet
+                notarized. After installing, run this once in Terminal:
+                <pre className="xattr-cmd">xattr -cr /Applications/RedfireForge.app</pre>
+                Then double-click the app normally. This is only needed once.
+              </div>
             </section>
 
             <h2 className="sec-title">Also available for</h2>

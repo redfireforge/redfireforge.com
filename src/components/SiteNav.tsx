@@ -15,6 +15,7 @@ export function SiteNav() {
           <a href="https://app.redfireforge.com">Web App</a>
           <a href="https://demo.redfireforge.com">Demo</a>
           <a href="https://github.com/redfireforge/redfire-forge">GitHub</a>
+          <Link to="/contact">Contact</Link>
         </div>
       </div>
     </nav>

@@ -236,6 +236,38 @@ a {
   margin-right: auto;
 }
 
+.macos-gatekeeper-note {
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.macos-gatekeeper-note strong {
+  color: var(--text);
+}
+
+.xattr-cmd {
+  display: block;
+  margin: 8px 0 6px;
+  padding: 7px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.83rem;
+  color: var(--accent);
+  user-select: all;
+  cursor: text;
+}
+
 .sec-title {
   font-family: var(--mono);
   font-size: 0.76rem;
@@ -463,5 +495,154 @@ details[open] summary::after {
     flex-direction: column;
     white-space: normal;
     word-break: break-all;
+  }
+}
+
+/* ── contact page ───────────────────────────────────────── */
+.contact-page {
+  padding-top: 60px;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-label {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 14px;
+}
+
+.contact-header h1 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+
+.contact-sub {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-field label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.contact-field input,
+.contact-field textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-family: var(--font);
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  border-color: var(--primary);
+}
+
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: color-mix(in srgb, var(--text-muted) 55%, transparent);
+}
+
+.contact-submit {
+  align-self: flex-start;
+  background: linear-gradient(135deg, var(--ember), var(--ember-deep));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 26px;
+  font-size: 0.95rem;
+  font-weight: 650;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.contact-submit:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.contact-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+.contact-direct {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-direct-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.contact-email-link {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.contact-email-link:hover {
+  text-decoration: underline;
+}
+
+.contact-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .contact-card {
+    padding: 24px 18px;
+  }
+
+  .contact-submit {
+    width: 100%;
+    justify-content: center;
   }
 }
