@@ -1,6 +1,6 @@
 # redfireforge.com
 
-Marketing / download site for [RedfireForge](https://github.com/redfireforge/redfire-forge).
+Marketing / download site for [RedfireForge](https://github.com/redfireforge/redfireforge-public).
 
 ## Phase 3 scope
 

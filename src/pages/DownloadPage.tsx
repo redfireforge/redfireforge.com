@@ -12,8 +12,8 @@ import {
   type LatestRelease,
 } from '../utils/githubRelease';
 
-const GITHUB_RELEASES = 'https://github.com/redfireforge/redfire-forge/releases';
-const GITHUB_REPO = 'https://github.com/redfireforge/redfire-forge';
+const GITHUB_RELEASES = 'https://github.com/redfireforge/redfireforge-public/releases';
+const GITHUB_REPO = 'https://github.com/redfireforge/redfireforge-public';
 
 type LoadState = 'loading' | 'ready' | 'empty' | 'error';
 
@@ -87,7 +87,7 @@ export function DownloadPage() {
             </a>
             <p className="status-card__link">
               <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">
-                github.com/redfireforge/redfire-forge
+                github.com/redfireforge/redfireforge-public
               </a>
             </p>
           </div>

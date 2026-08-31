@@ -10,8 +10,8 @@ import {
 } from '../utils/githubRelease';
 import '../styles/landing.css';
 
-const GITHUB_REPO = 'https://github.com/redfireforge/redfire-forge';
-const GITHUB_RELEASES = 'https://github.com/redfireforge/redfire-forge/releases';
+const GITHUB_REPO = 'https://github.com/redfireforge/redfireforge-public';
+const GITHUB_RELEASES = 'https://github.com/redfireforge/redfireforge-public/releases';
 const APP_URL = 'https://app.redfireforge.com';
 const DEMO_URL = 'https://demo.redfireforge.com';
 

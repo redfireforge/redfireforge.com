@@ -15,7 +15,7 @@ export interface LatestRelease {
   htmlUrl: string;
 }
 
-const REPO = 'redfireforge/redfire-forge';
+const REPO = 'redfireforge/redfireforge-public';
 const CACHE_KEY = 'rff-marketing-latest-release';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 

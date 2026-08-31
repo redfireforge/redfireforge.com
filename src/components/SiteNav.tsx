@@ -14,7 +14,7 @@ export function SiteNav() {
           <Link to="/" style={{ color: 'var(--text-muted)' }}>Home</Link>
           <a href="https://app.redfireforge.com">Web App</a>
           <a href="https://demo.redfireforge.com">Demo</a>
-          <a href="https://github.com/redfireforge/redfire-forge">GitHub</a>
+          <a href="https://github.com/redfireforge/redfireforge-public">GitHub</a>
           <Link to="/contact">Contact</Link>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import { SiteNav } from '../components/SiteNav';
 
 const SUPPORT_EMAIL = 'support@redfireforge.com';
-const GITHUB_ISSUES = 'https://github.com/redfireforge/redfire-forge/issues';
-const GITHUB_DISCUSSIONS = 'https://github.com/redfireforge/redfire-forge/discussions';
+const GITHUB_ISSUES = 'https://github.com/redfireforge/redfireforge-public/issues';
+const GITHUB_DISCUSSIONS = 'https://github.com/redfireforge/redfireforge-public/discussions';
 
 const CHANNELS = [
   {
