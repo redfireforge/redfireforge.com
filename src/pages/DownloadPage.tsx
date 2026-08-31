@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { SiteNav } from '../components/SiteNav';
-import { detectOSTarget, platformLabel, PLATFORM_OPTIONS, type OSTarget } from '../utils/detectOS';
+import { detectOSTarget, platformLabel, PLATFORM_OPTIONS, LH_PLATFORM_OPTIONS, type OSTarget } from '../utils/detectOS';
 import {
   fetchChecksums,
   fetchLatestRelease,
+  fetchLatestLearningHubRelease,
   findAsset,
   formatBytes,
   formatReleaseDate,
@@ -22,6 +23,7 @@ export function DownloadPage() {
   const [state, setState] = useState<LoadState>('loading');
   const [release, setRelease] = useState<LatestRelease | null>(null);
   const [checksums, setChecksums] = useState<string | null>(null);
+  const [lhRelease, setLhRelease] = useState<LatestRelease | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,6 +38,9 @@ export function DownloadPage() {
       setState('ready');
       const sums = await fetchChecksums(data.assets);
       if (!cancelled) setChecksums(sums);
+      // Fetch Learning Hub release in parallel (non-blocking)
+      const lh = await fetchLatestLearningHubRelease();
+      if (!cancelled) setLhRelease(lh);
     })().catch(() => {
       if (!cancelled) setState('error');
     });
@@ -219,6 +224,54 @@ export function DownloadPage() {
                 View all releases on GitHub →
               </a>
             </p>
+
+            {/* Learning Hub Edition */}
+            <section className="lh-section">
+              <div className="lh-header">
+                <span className="lh-badge">Learning Hub Edition</span>
+                <h2 className="lh-title">RedfireForge + Interactive Tutorials</h2>
+                <p className="lh-sub">
+                  Everything in the standard build, plus 28 guided lessons covering HTTP, GraphQL,
+                  gRPC, WebSocket, SSE, and Kafka — built into the app.
+                </p>
+              </div>
+              {lhRelease ? (
+                <div className="plat-list">
+                  {LH_PLATFORM_OPTIONS.map((p) => {
+                    const asset = lhRelease.assets.find((a) => p.pattern.test(a.name));
+                    const href = asset?.browser_download_url ?? lhRelease.htmlUrl;
+                    const isDetected = p.id === detected;
+                    return (
+                      <a
+                        key={p.id}
+                        href={href}
+                        target={asset ? '_self' : '_blank'}
+                        rel="noopener noreferrer"
+                        className={`plat-btn lh-plat-btn${isDetected ? ' primary' : ''}`}
+                      >
+                        <span className="plat-icon" aria-hidden>
+                          {p.format === 'dmg' ? '🍎' : p.format === 'exe' ? '🪟' : '🐧'}
+                        </span>
+                        <span>
+                          <span className="plat-name">{p.label}</span>
+                          <span className="plat-sub">
+                            .{p.format}{asset?.size ? ` · ${formatBytes(asset.size)}` : ''}
+                          </span>
+                        </span>
+                        <span className="plat-dl" aria-hidden>↓</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="lh-unavail">
+                  Learning Hub build not yet published for v{release.version}.{' '}
+                  <a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">
+                    Check GitHub releases →
+                  </a>
+                </p>
+              )}
+            </section>
           </>
         )}
       </main>

@@ -760,3 +760,63 @@ details[open] summary::after {
   }
 }
 
+/* ── Learning Hub Edition section (DownloadPage) ────────────── */
+.lh-section {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.lh-header {
+  margin-bottom: 20px;
+}
+
+.lh-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, #6366f1 16%, transparent);
+  border: 1px solid color-mix(in srgb, #6366f1 35%, transparent);
+  color: #a5b4fc;
+  margin-bottom: 10px;
+}
+
+.lh-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.lh-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 500px;
+}
+
+.lh-plat-btn {
+  opacity: 0.9;
+}
+
+.lh-plat-btn:hover {
+  opacity: 1;
+  border-color: color-mix(in srgb, #6366f1 60%, var(--border));
+}
+
+.lh-plat-btn.primary {
+  border-color: color-mix(in srgb, #6366f1 50%, var(--border));
+  background: color-mix(in srgb, #6366f1 8%, var(--surface));
+}
+
+.lh-unavail {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+

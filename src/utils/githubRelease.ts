@@ -32,6 +32,19 @@ export function isOfficialStableRelease(
   return /^\d+\.\d+\.\d+$/.test(tagName.replace(/^v/, ''));
 }
 
+/** Official stable Learning Hub release — same criteria but requires Learning Hub in name. */
+export function isOfficialLearningHubRelease(
+  tagName: string,
+  name = '',
+  prerelease = false,
+  draft = false,
+): boolean {
+  if (draft || prerelease) return false;
+  if (!/Learning\s*Hub/i.test(name)) return false;
+  if (/-/.test(tagName.replace(/^v/, ''))) return false;
+  return /^\d+\.\d+\.\d+$/.test(tagName.replace(/^v/, ''));
+}
+
 export function getDownloadUrl(assets: ReleaseAsset[], target: OSTarget): string | null {
   const opt = PLATFORM_OPTIONS.find((p) => p.id === target);
   if (!opt) return null;
@@ -111,6 +124,45 @@ export async function fetchLatestRelease(): Promise<LatestRelease | null> {
     } catch {
       // ignore
     }
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+const LH_CACHE_KEY = 'rff-marketing-latest-lh-release';
+
+export async function fetchLatestLearningHubRelease(): Promise<LatestRelease | null> {
+  try {
+    const cached = sessionStorage.getItem(LH_CACHE_KEY);
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached) as { data: LatestRelease; timestamp: number };
+      if (Date.now() - timestamp < CACHE_TTL_MS) return data;
+    }
+  } catch { /* ignore */ }
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/releases`, {
+      headers: { Accept: 'application/vnd.github+json' },
+    });
+    if (!res.ok) return null;
+    const releases = (await res.json()) as Array<{
+      tag_name: string; prerelease: boolean; draft: boolean;
+      published_at: string; body: string | null; assets: ReleaseAsset[];
+      html_url: string; name: string;
+    }>;
+    const lh = releases.find((r) =>
+      isOfficialLearningHubRelease(r.tag_name, r.name, r.prerelease, r.draft),
+    );
+    if (!lh) return null;
+    const data: LatestRelease = {
+      tagName: lh.tag_name, version: lh.tag_name.replace(/^v/, ''),
+      publishedAt: lh.published_at, body: lh.body ?? '',
+      assets: lh.assets ?? [], htmlUrl: lh.html_url,
+    };
+    try {
+      sessionStorage.setItem(LH_CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+    } catch { /* ignore */ }
     return data;
   } catch {
     return null;
