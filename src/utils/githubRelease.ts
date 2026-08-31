@@ -32,17 +32,17 @@ export function isOfficialStableRelease(
   return /^\d+\.\d+\.\d+$/.test(tagName.replace(/^v/, ''));
 }
 
-/** Official stable Learning Hub release — same criteria but requires Learning Hub in name. */
+/** Official stable Learning Hub release — tag must end with -lh (e.g. v0.8.3-lh). */
 export function isOfficialLearningHubRelease(
   tagName: string,
-  name = '',
+  _name = '',
   prerelease = false,
   draft = false,
 ): boolean {
   if (draft || prerelease) return false;
-  if (!/Learning\s*Hub/i.test(name)) return false;
-  if (/-/.test(tagName.replace(/^v/, ''))) return false;
-  return /^\d+\.\d+\.\d+$/.test(tagName.replace(/^v/, ''));
+  // New convention: tags are vX.Y.Z-lh (separate release from Standard vX.Y.Z).
+  const stripped = tagName.replace(/^v/, '');
+  return /^\d+\.\d+\.\d+-lh$/.test(stripped);
 }
 
 export function getDownloadUrl(assets: ReleaseAsset[], target: OSTarget): string | null {
@@ -156,7 +156,7 @@ export async function fetchLatestLearningHubRelease(): Promise<LatestRelease | n
     );
     if (!lh) return null;
     const data: LatestRelease = {
-      tagName: lh.tag_name, version: lh.tag_name.replace(/^v/, ''),
+      tagName: lh.tag_name, version: lh.tag_name.replace(/^v/, '').replace(/-lh$/, ''),
       publishedAt: lh.published_at, body: lh.body ?? '',
       assets: lh.assets ?? [], htmlUrl: lh.html_url,
     };
