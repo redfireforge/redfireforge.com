@@ -20,7 +20,8 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
   { id: 'linux-deb', label: 'Linux .deb', format: 'deb', pattern: /\.deb$/ },
 ];
 
-/** Same targets but matching Learning Hub asset names (e.g. RedfireForge-LearningHub-0.8.2-macos-aarch64.dmg) */
+/** Same targets but matching Learning Hub asset names (e.g. RedfireForge-LearningHub-0.8.2-macos-aarch64.dmg).
+ *  Tauri on ubuntu-22.04 produces both AppImage and .deb, so LH has the same 5 targets as Standard. */
 export const LH_PLATFORM_OPTIONS: PlatformOption[] = [
   { id: 'macos-arm',      label: 'macOS Apple Silicon', format: 'dmg',      pattern: /LearningHub.*aarch64\.dmg$/i },
   { id: 'macos-x64',      label: 'macOS Intel',         format: 'dmg',      pattern: /LearningHub.*(x64|x86_64)\.dmg$/i },
