@@ -717,7 +717,7 @@ function FaqSection() {
   );
 }
 
-const WAITLIST_URL = 'https://tally.so/r/lbErXW';
+const WAITLIST_URL = 'https://tally.so/r/1AaNzQ';
 
 function WaitlistCta() {
   return (
