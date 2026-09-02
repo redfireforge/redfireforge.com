@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { detectOSTarget, platformLabel, PLATFORM_OPTIONS, type OSTarget } from '../utils/detectOS';
+import { detectOSTarget, platformLabel } from '../utils/detectOS';
 import {
   fetchLatestRelease,
-  findAsset,
+  fetchLatestLearningHubRelease,
   getDownloadUrl,
   formatReleaseDate,
   type LatestRelease,
 } from '../utils/githubRelease';
+import { DownloadEditions } from '../components/DownloadEditions';
 import '../styles/landing.css';
 
 const GITHUB_REPO = 'https://github.com/redfireforge/redfireforge-public';
@@ -19,6 +20,7 @@ const DEMO_URL = 'https://demo.redfireforge.com';
 
 function useLatestRelease() {
   const [release, setRelease] = useState<LatestRelease | null>(null);
+  const [lhRelease, setLhRelease] = useState<LatestRelease | null>(null);
   const detected = useMemo(() => detectOSTarget(), []);
 
   useEffect(() => {
@@ -26,13 +28,16 @@ function useLatestRelease() {
     fetchLatestRelease().then((data) => {
       if (!cancelled) setRelease(data);
     });
+    fetchLatestLearningHubRelease().then((data) => {
+      if (!cancelled) setLhRelease(data);
+    });
     return () => {
       cancelled = true;
     };
   }, []);
 
   const primaryUrl = release ? getDownloadUrl(release.assets, detected) : null;
-  return { release, detected, primaryUrl };
+  return { release, lhRelease, detected, primaryUrl };
 }
 
 // ── sub-components ──────────────────────────────────────────
@@ -576,9 +581,7 @@ function CliSection() {
 }
 
 function DownloadSection() {
-  const { release, detected, primaryUrl } = useLatestRelease();
-  const otherPlatforms = PLATFORM_OPTIONS.filter((p) => p.id !== detected);
-  const mainHref = primaryUrl ?? `${GITHUB_RELEASES}/latest`;
+  const { release, lhRelease } = useLatestRelease();
 
   return (
     <section id="download" className="lp-section lp-download">
@@ -598,57 +601,13 @@ function DownloadSection() {
           </div>
         )}
 
-        <div>
-          <a href={mainHref} className="lp-btn lp-btn-primary lp-btn-lg">
-            ↓ Download for {platformLabel(detected)}
-          </a>
-        </div>
-
-        <div className="dl-alt-row">
-          {otherPlatforms.map((p) => {
-            const asset = release ? findAsset(release.assets, p.id as OSTarget) : null;
-            const href = asset?.browser_download_url ?? GITHUB_RELEASES;
-            const isApple = p.id.startsWith('macos');
-            const isWin = p.id.startsWith('windows');
-            return (
-              <a
-                key={p.id}
-                className="dl-alt-btn"
-                href={href}
-                target={asset ? undefined : '_blank'}
-                rel={asset ? undefined : 'noopener noreferrer'}
-              >
-                {isApple ? '' : isWin ? '⊞' : '🐧'} {p.label}
-              </a>
-            );
-          })}
-          <a
-            className="dl-alt-btn"
-            href="https://www.npmjs.com/package/redfireforge-cli"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ⌨️ CLI via npm
-          </a>
-        </div>
-
-        <div className="homebrew-card lp-homebrew">
-          <span className="homebrew-icon" aria-hidden>🍺</span>
-          <div className="homebrew-body">
-            <p className="homebrew-title">Homebrew (macOS) — bypasses Gatekeeper</p>
-            <pre className="homebrew-cmd">{'brew tap redfireforge/tap\nbrew install --cask redfireforge'}</pre>
-          </div>
-        </div>
-
-        <div className="macos-gatekeeper-note">
-          <strong>Direct download:</strong> If you install the <code>.dmg</code> manually, run once in Terminal:
-          <pre className="xattr-cmd">xattr -cr /Applications/RedfireForge.app</pre>
-          Then open the app normally. One time only.
-        </div>
+        {release ? (
+          <DownloadEditions release={release} lhRelease={lhRelease} />
+        ) : (
+          <p style={{ color: 'var(--text-muted)', marginTop: 12 }}>Loading latest release…</p>
+        )}
 
         <p className="dl-meta-links">
-          <Link to="/download">Full download page</Link>
-          {' · '}
           <a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">All releases on GitHub</a>
           {' · '}
           <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">Build from source</a>
