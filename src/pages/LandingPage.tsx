@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 import { detectOSTarget, platformLabel } from '../utils/detectOS';
 import {
   fetchLatestRelease,
-  fetchLatestLearningHubRelease,
   getDownloadUrl,
   formatReleaseDate,
   type LatestRelease,
 } from '../utils/githubRelease';
-import { DownloadEditions } from '../components/DownloadEditions';
+import { DownloadPanel } from '../components/DownloadPanel';
 import '../styles/landing.css';
 
 const GITHUB_REPO = 'https://github.com/redfireforge/redfireforge-public';
@@ -20,7 +19,6 @@ const DEMO_URL = 'https://demo.redfireforge.com';
 
 function useLatestRelease() {
   const [release, setRelease] = useState<LatestRelease | null>(null);
-  const [lhRelease, setLhRelease] = useState<LatestRelease | null>(null);
   const detected = useMemo(() => detectOSTarget(), []);
 
   useEffect(() => {
@@ -28,16 +26,13 @@ function useLatestRelease() {
     fetchLatestRelease().then((data) => {
       if (!cancelled) setRelease(data);
     });
-    fetchLatestLearningHubRelease().then((data) => {
-      if (!cancelled) setLhRelease(data);
-    });
     return () => {
       cancelled = true;
     };
   }, []);
 
   const primaryUrl = release ? getDownloadUrl(release.assets, detected) : null;
-  return { release, lhRelease, detected, primaryUrl };
+  return { release, detected, primaryUrl };
 }
 
 // ── sub-components ──────────────────────────────────────────
@@ -581,37 +576,10 @@ function CliSection() {
 }
 
 function DownloadSection() {
-  const { release, lhRelease } = useLatestRelease();
-
   return (
     <section id="download" className="lp-section lp-download">
       <div className="lp-wrap lp-dl-inner">
-        <div className="lp-section-label">Get started</div>
-        <h2 style={{ fontSize: 'clamp(1.9rem, 3.8vw, 2.6rem)', fontWeight: 780, letterSpacing: '-0.026em', marginBottom: 18 }}>
-          Download RedfireForge
-        </h2>
-        <p style={{ color: 'var(--text-muted)', maxWidth: 560, margin: '0 auto 26px' }}>
-          Free and open source. No account, no telemetry, no license key.
-        </p>
-
-        {release && (
-          <div className="dl-version-pill">
-            <span className="pulse" aria-hidden />
-            <span>Latest release · v{release.version} · {formatReleaseDate(release.publishedAt)}</span>
-          </div>
-        )}
-
-        {release ? (
-          <DownloadEditions release={release} lhRelease={lhRelease} />
-        ) : (
-          <p style={{ color: 'var(--text-muted)', marginTop: 12 }}>Loading latest release…</p>
-        )}
-
-        <p className="dl-meta-links">
-          <a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">All releases on GitHub</a>
-          {' · '}
-          <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">Build from source</a>
-        </p>
+        <DownloadPanel embedded />
       </div>
     </section>
   );
