@@ -45,11 +45,34 @@ export function isOfficialLearningHubRelease(
   return /^\d+\.\d+\.\d+-lh$/.test(stripped);
 }
 
-export function getDownloadUrl(assets: ReleaseAsset[], target: OSTarget): string | null {
+/** Official GitHub tags we will redirect: v1.2.3 or v1.2.3-lh. */
+export const SAFE_RELEASE_TAG = /^v\d+\.\d+\.\d+(?:-lh)?$/;
+
+/** Installer names from our Tauri builds — no slashes or query chars. */
+export const SAFE_ASSET_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+
+/**
+ * Same-origin path so Chrome uses this filename instead of GitHub's UUID
+ * redirect (`release-assets.githubusercontent.com/.../<uuid>`).
+ */
+export function namedAssetUrl(tagName: string, assetName: string): string | null {
+  if (!SAFE_RELEASE_TAG.test(tagName) || !SAFE_ASSET_NAME.test(assetName)) return null;
+  return `/dl/${tagName}/${assetName}`;
+}
+
+export function getDownloadUrl(
+  assets: ReleaseAsset[],
+  target: OSTarget,
+  tagName?: string,
+): string | null {
   const opt = PLATFORM_OPTIONS.find((p) => p.id === target);
   if (!opt) return null;
   const asset = assets.find((a) => opt.pattern.test(a.name));
-  return asset?.browser_download_url ?? null;
+  if (!asset) return null;
+  if (tagName) {
+    return namedAssetUrl(tagName, asset.name) ?? asset.browser_download_url;
+  }
+  return asset.browser_download_url;
 }
 
 export function findAsset(assets: ReleaseAsset[], target: OSTarget): ReleaseAsset | null {
