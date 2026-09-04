@@ -19,7 +19,7 @@ const REPO = 'redfireforge/redfireforge-public';
 const CACHE_KEY = 'rff-marketing-latest-release';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
-/** Official stable tags only — never alpha/beta/rc or Learning Hub. */
+/** Official stable tags only — never alpha/beta/rc or leftover -lh releases. */
 export function isOfficialStableRelease(
   tagName: string,
   name = '',
@@ -32,7 +32,7 @@ export function isOfficialStableRelease(
   return /^\d+\.\d+\.\d+$/.test(tagName.replace(/^v/, ''));
 }
 
-/** Official stable Learning Hub release — tag must end with -lh (e.g. v0.8.3-lh). */
+/** Legacy Learning Hub-only tag (vX.Y.Z-lh) from before both editions shared vX.Y.Z. */
 export function isOfficialLearningHubRelease(
   tagName: string,
   _name = '',
@@ -40,12 +40,19 @@ export function isOfficialLearningHubRelease(
   draft = false,
 ): boolean {
   if (draft || prerelease) return false;
-  // New convention: tags are vX.Y.Z-lh (separate release from Standard vX.Y.Z).
   const stripped = tagName.replace(/^v/, '');
   return /^\d+\.\d+\.\d+-lh$/.test(stripped);
 }
 
-/** Official GitHub tags we will redirect: v1.2.3 or v1.2.3-lh. */
+export function hasLearningHubAssets(assets: ReleaseAsset[]): boolean {
+  return assets.some((a) => /LearningHub/i.test(a.name));
+}
+
+function isLearningHubAsset(name: string): boolean {
+  return /LearningHub/i.test(name);
+}
+
+/** Official GitHub tags we will redirect: v1.2.3, plus leftover v1.2.3-lh links. */
 export const SAFE_RELEASE_TAG = /^v\d+\.\d+\.\d+(?:-lh)?$/;
 
 /** Installer names from our Tauri builds — no slashes or query chars. */
@@ -67,7 +74,7 @@ export function getDownloadUrl(
 ): string | null {
   const opt = PLATFORM_OPTIONS.find((p) => p.id === target);
   if (!opt) return null;
-  const asset = assets.find((a) => opt.pattern.test(a.name));
+  const asset = assets.find((a) => opt.pattern.test(a.name) && !isLearningHubAsset(a.name));
   if (!asset) return null;
   if (tagName) {
     return namedAssetUrl(tagName, asset.name) ?? asset.browser_download_url;
@@ -78,7 +85,7 @@ export function getDownloadUrl(
 export function findAsset(assets: ReleaseAsset[], target: OSTarget): ReleaseAsset | null {
   const opt = PLATFORM_OPTIONS.find((p) => p.id === target);
   if (!opt) return null;
-  return assets.find((a) => opt.pattern.test(a.name)) ?? null;
+  return assets.find((a) => opt.pattern.test(a.name) && !isLearningHubAsset(a.name)) ?? null;
 }
 
 export function formatBytes(size: number): string {
@@ -174,9 +181,14 @@ export async function fetchLatestLearningHubRelease(): Promise<LatestRelease | n
       published_at: string; body: string | null; assets: ReleaseAsset[];
       html_url: string; name: string;
     }>;
-    const lh = releases.find((r) =>
+    const stable = releases.find((r) =>
+      isOfficialStableRelease(r.tag_name, r.name, r.prerelease, r.draft),
+    );
+    const fromStable = stable && hasLearningHubAssets(stable.assets ?? []) ? stable : null;
+    const legacy = releases.find((r) =>
       isOfficialLearningHubRelease(r.tag_name, r.name, r.prerelease, r.draft),
     );
+    const lh = fromStable ?? legacy ?? null;
     if (!lh) return null;
     const data: LatestRelease = {
       tagName: lh.tag_name, version: lh.tag_name.replace(/^v/, '').replace(/-lh$/, ''),
