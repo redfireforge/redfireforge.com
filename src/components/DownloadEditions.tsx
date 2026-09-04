@@ -10,6 +10,7 @@ import {
   findAsset,
   formatBytes,
   getDownloadUrl,
+  namedAssetUrl,
   type LatestRelease,
 } from '../utils/githubRelease';
 
@@ -27,7 +28,7 @@ export function DownloadEditions({ release, lhRelease }: Props) {
   const [activeTab, setActiveTab] = useState<EditionTab>('standard');
 
   // Standard edition
-  const primaryUrl = getDownloadUrl(release.assets, detected);
+  const primaryUrl = getDownloadUrl(release.assets, detected, release.tagName);
   const primaryAsset = findAsset(release.assets, detected);
   const otherPlatforms = PLATFORM_OPTIONS.filter((p) => p.id !== detected);
 
@@ -35,7 +36,9 @@ export function DownloadEditions({ release, lhRelease }: Props) {
   const lhPrimaryAsset = lhRelease
     ? lhRelease.assets.find((a) => LH_PLATFORM_OPTIONS.find((p) => p.id === detected)?.pattern.test(a.name)) ?? null
     : null;
-  const lhPrimaryUrl = lhPrimaryAsset?.browser_download_url ?? (lhRelease?.htmlUrl ?? null);
+  const lhPrimaryUrl = lhPrimaryAsset && lhRelease
+    ? namedAssetUrl(lhRelease.tagName, lhPrimaryAsset.name) ?? lhPrimaryAsset.browser_download_url
+    : (lhRelease?.htmlUrl ?? null);
   const lhOtherPlatforms = LH_PLATFORM_OPTIONS.filter((p) => p.id !== detected);
 
   return (
@@ -80,7 +83,11 @@ export function DownloadEditions({ release, lhRelease }: Props) {
             <div className="detected">Detected: {platformLabel(detected)}</div>
             {primaryUrl ? (
               <>
-                <a className="btn btn-primary" href={primaryUrl}>
+                <a
+                  className="btn btn-primary"
+                  href={primaryUrl}
+                  download={primaryAsset?.name}
+                >
                   ↓ Download for {platformLabel(detected)}
                 </a>
                 {primaryAsset && (
@@ -100,6 +107,7 @@ export function DownloadEditions({ release, lhRelease }: Props) {
             )}
             <p className="macos-note">
               Both Apple Silicon and Intel shown below — detection can be wrong under Rosetta.
+              If the file has no extension, rename it to the name shown above.
             </p>
           </div>
 
@@ -108,12 +116,15 @@ export function DownloadEditions({ release, lhRelease }: Props) {
             <div className="plat-grid">
               {otherPlatforms.map((p) => {
                 const asset = findAsset(release.assets, p.id as OSTarget);
-                const href = asset?.browser_download_url ?? release.htmlUrl;
+                const href = asset
+                  ? namedAssetUrl(release.tagName, asset.name) ?? asset.browser_download_url
+                  : release.htmlUrl;
                 return (
                   <a
                     key={p.id}
                     className="plat"
                     href={href}
+                    download={asset?.name}
                     target={asset ? undefined : '_blank'}
                     rel={asset ? undefined : 'noopener noreferrer'}
                   >
@@ -185,7 +196,11 @@ export function DownloadEditions({ release, lhRelease }: Props) {
                 <div className="detected">Detected: {platformLabel(detected)}</div>
                 {lhPrimaryUrl ? (
                   <>
-                    <a className="btn btn-primary btn-primary--lh" href={lhPrimaryUrl}>
+                    <a
+                      className="btn btn-primary btn-primary--lh"
+                      href={lhPrimaryUrl}
+                      download={lhPrimaryAsset?.name}
+                    >
                       ↓ Download for {platformLabel(detected)}
                     </a>
                     {lhPrimaryAsset && (
@@ -205,6 +220,7 @@ export function DownloadEditions({ release, lhRelease }: Props) {
                 )}
                 <p className="macos-note">
                   Both Apple Silicon and Intel shown below — detection can be wrong under Rosetta.
+                  If the file has no extension, rename it to the name shown above.
                 </p>
               </div>
 
@@ -213,11 +229,14 @@ export function DownloadEditions({ release, lhRelease }: Props) {
                 <div className="plat-grid">
                   {lhOtherPlatforms.map((p) => {
                     const asset = lhRelease.assets.find((a) => p.pattern.test(a.name));
-                    const href = asset?.browser_download_url ?? lhRelease.htmlUrl;
+                    const href = asset
+                      ? namedAssetUrl(lhRelease.tagName, asset.name) ?? asset.browser_download_url
+                      : lhRelease.htmlUrl;
                     return (
                       <a
                         key={p.id}
                         href={href}
+                        download={asset?.name}
                         target={asset ? '_self' : '_blank'}
                         rel="noopener noreferrer"
                         className="plat plat--lh"
