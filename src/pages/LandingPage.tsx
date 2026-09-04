@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { detectOSTarget, platformLabel } from '../utils/detectOS';
 import {
   fetchLatestRelease,
+  findAsset,
   getDownloadUrl,
   formatReleaseDate,
   type LatestRelease,
@@ -31,8 +32,9 @@ function useLatestRelease() {
     };
   }, []);
 
-  const primaryUrl = release ? getDownloadUrl(release.assets, detected) : null;
-  return { release, detected, primaryUrl };
+  const primaryAsset = release ? findAsset(release.assets, detected) : null;
+  const primaryUrl = release ? getDownloadUrl(release.assets, detected, release.tagName) : null;
+  return { release, detected, primaryUrl, primaryName: primaryAsset?.name };
 }
 
 // ── sub-components ──────────────────────────────────────────
@@ -65,7 +67,7 @@ function LandingNav() {
 }
 
 function Hero() {
-  const { release, detected, primaryUrl } = useLatestRelease();
+  const { release, detected, primaryUrl, primaryName } = useLatestRelease();
   const heroDownloadLabel = `↓ Download for ${platformLabel(detected)}`;
   const heroHref = primaryUrl ?? `${GITHUB_RELEASES}/latest`;
 
@@ -89,7 +91,7 @@ function Hero() {
         <p className="hero-tagline">Fire. Measure. Validate.</p>
 
         <div className="hero-actions">
-          <a href={heroHref} className="lp-btn lp-btn-primary lp-btn-lg">
+          <a href={heroHref} className="lp-btn lp-btn-primary lp-btn-lg" download={primaryName}>
             {heroDownloadLabel}
           </a>
           <a href={APP_URL} className="lp-btn lp-btn-ghost lp-btn-lg">
@@ -671,7 +673,7 @@ function WaitlistCta() {
 }
 
 function FinalCta() {
-  const { detected, primaryUrl } = useLatestRelease();
+  const { detected, primaryUrl, primaryName } = useLatestRelease();
   const mainHref = primaryUrl ?? `${GITHUB_RELEASES}/latest`;
   return (
     <div className="lp-band final-cta">
@@ -679,7 +681,7 @@ function FinalCta() {
         <h2>Fire. Measure. Validate.</h2>
         <p>Stop stitching five tools together. Start with one.</p>
         <div className="hero-actions">
-          <a href={mainHref} className="lp-btn lp-btn-primary lp-btn-lg">
+          <a href={mainHref} className="lp-btn lp-btn-primary lp-btn-lg" download={primaryName}>
             ↓ Download for {platformLabel(detected)} — free
           </a>
           <a href={DEMO_URL} className="lp-btn lp-btn-ghost lp-btn-lg">

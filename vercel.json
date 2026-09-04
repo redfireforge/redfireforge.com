@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/dl/:tag/:file",
+      "destination": "https://github.com/redfireforge/redfireforge-public/releases/download/:tag/:file",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
