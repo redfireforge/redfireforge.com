@@ -1,4 +1,5 @@
 import { PLATFORM_OPTIONS, type OSTarget } from './detectOS';
+import { SAFE_ASSET_NAME, SAFE_RELEASE_TAG } from './namedDownload';
 
 export interface ReleaseAsset {
   name: string;
@@ -52,15 +53,11 @@ function isLearningHubAsset(name: string): boolean {
   return /LearningHub/i.test(name);
 }
 
-/** Official GitHub tags we will redirect: v1.2.3, plus leftover v1.2.3-lh links. */
-export const SAFE_RELEASE_TAG = /^v\d+\.\d+\.\d+(?:-lh)?$/;
-
-/** Installer names from our Tauri builds — no slashes or query chars. */
-export const SAFE_ASSET_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+export { SAFE_ASSET_NAME, SAFE_RELEASE_TAG } from './namedDownload';
 
 /**
- * Same-origin path so Chrome uses this filename instead of GitHub's UUID
- * redirect (`release-assets.githubusercontent.com/.../<uuid>`).
+ * Same-origin path. Chrome names the file from this URL only if the response
+ * is not a 302 to GitHub's UUID CDN — `/api/dl` proxies and sets Content-Disposition.
  */
 export function namedAssetUrl(tagName: string, assetName: string): string | null {
   if (!SAFE_RELEASE_TAG.test(tagName) || !SAFE_ASSET_NAME.test(assetName)) return null;

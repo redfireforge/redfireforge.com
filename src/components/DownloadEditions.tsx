@@ -107,7 +107,6 @@ export function DownloadEditions({ release, lhRelease }: Props) {
             )}
             <p className="macos-note">
               Both Apple Silicon and Intel shown below — detection can be wrong under Rosetta.
-              If the file has no extension, rename it to the name shown above.
             </p>
           </div>
 
@@ -220,7 +219,6 @@ export function DownloadEditions({ release, lhRelease }: Props) {
                 )}
                 <p className="macos-note">
                   Both Apple Silicon and Intel shown below — detection can be wrong under Rosetta.
-                  If the file has no extension, rename it to the name shown above.
                 </p>
               </div>
 
