@@ -1,12 +1,6 @@
 {
-  "redirects": [
-    {
-      "source": "/dl/:tag/:file",
-      "destination": "https://github.com/redfireforge/redfireforge-public/releases/download/:tag/:file",
-      "permanent": false
-    }
-  ],
   "rewrites": [
+    { "source": "/dl/:tag/:file", "destination": "/api/dl?tag=:tag&file=:file" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
