@@ -17,8 +17,11 @@ export interface LatestRelease {
 }
 
 const REPO = 'redfireforge/redfireforge-public';
-const CACHE_KEY = 'rff-marketing-latest-release';
-const CACHE_TTL_MS = 5 * 60 * 1000;
+const RELEASES_URL = `https://api.github.com/repos/${REPO}/releases`;
+const RELEASES_FETCH: RequestInit = {
+  headers: { Accept: 'application/vnd.github+json' },
+  cache: 'no-store',
+};
 
 /** Official stable tags only — never alpha/beta/rc or leftover -lh releases. */
 export function isOfficialStableRelease(
@@ -104,22 +107,7 @@ export function formatReleaseDate(iso: string): string {
 
 export async function fetchLatestRelease(): Promise<LatestRelease | null> {
   try {
-    const cached = sessionStorage.getItem(CACHE_KEY);
-    if (cached) {
-      const { data, timestamp } = JSON.parse(cached) as {
-        data: LatestRelease;
-        timestamp: number;
-      };
-      if (Date.now() - timestamp < CACHE_TTL_MS) return data;
-    }
-  } catch {
-    // ignore corrupt cache
-  }
-
-  try {
-    const res = await fetch(`https://api.github.com/repos/${REPO}/releases`, {
-      headers: { Accept: 'application/vnd.github+json' },
-    });
+    const res = await fetch(RELEASES_URL, RELEASES_FETCH);
     if (!res.ok) return null;
     const releases = (await res.json()) as Array<{
       tag_name: string;
@@ -137,7 +125,7 @@ export async function fetchLatestRelease(): Promise<LatestRelease | null> {
     );
     if (!stable) return null;
 
-    const data: LatestRelease = {
+    return {
       tagName: stable.tag_name,
       version: stable.tag_name.replace(/^v/, ''),
       publishedAt: stable.published_at,
@@ -145,33 +133,14 @@ export async function fetchLatestRelease(): Promise<LatestRelease | null> {
       assets: stable.assets ?? [],
       htmlUrl: stable.html_url,
     };
-
-    try {
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-    } catch {
-      // ignore
-    }
-    return data;
   } catch {
     return null;
   }
 }
 
-const LH_CACHE_KEY = 'rff-marketing-latest-lh-release';
-
 export async function fetchLatestLearningHubRelease(): Promise<LatestRelease | null> {
   try {
-    const cached = sessionStorage.getItem(LH_CACHE_KEY);
-    if (cached) {
-      const { data, timestamp } = JSON.parse(cached) as { data: LatestRelease; timestamp: number };
-      if (Date.now() - timestamp < CACHE_TTL_MS) return data;
-    }
-  } catch { /* ignore */ }
-
-  try {
-    const res = await fetch(`https://api.github.com/repos/${REPO}/releases`, {
-      headers: { Accept: 'application/vnd.github+json' },
-    });
+    const res = await fetch(RELEASES_URL, RELEASES_FETCH);
     if (!res.ok) return null;
     const releases = (await res.json()) as Array<{
       tag_name: string; prerelease: boolean; draft: boolean;
@@ -187,15 +156,11 @@ export async function fetchLatestLearningHubRelease(): Promise<LatestRelease | n
     );
     const lh = fromStable ?? legacy ?? null;
     if (!lh) return null;
-    const data: LatestRelease = {
+    return {
       tagName: lh.tag_name, version: lh.tag_name.replace(/^v/, '').replace(/-lh$/, ''),
       publishedAt: lh.published_at, body: lh.body ?? '',
       assets: lh.assets ?? [], htmlUrl: lh.html_url,
     };
-    try {
-      sessionStorage.setItem(LH_CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-    } catch { /* ignore */ }
-    return data;
   } catch {
     return null;
   }
