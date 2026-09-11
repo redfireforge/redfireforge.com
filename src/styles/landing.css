@@ -49,22 +49,6 @@
   font-size: 1.04rem;
 }
 
-/* ── landing nav override ───────────────────────────────── */
-.nav-landing .nav-inner {
-  max-width: 1180px;
-}
-
-.nav-landing .nav-links {
-  margin-left: 0;
-}
-
-.nav-landing .nav-cta {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 /* ── buttons ────────────────────────────────────────────── */
 .lp-btn {
   display: inline-flex;

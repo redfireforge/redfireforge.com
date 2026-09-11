@@ -90,8 +90,24 @@ a {
   margin-left: auto;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a[aria-current='page'] {
   color: var(--text);
+}
+
+.nav-landing .nav-inner {
+  max-width: 1180px;
+}
+
+.nav-landing .nav-links {
+  margin-left: 0;
+}
+
+.nav-landing .nav-cta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .head {
@@ -523,6 +539,12 @@ details[open] summary::after {
 
 .status-card__link a {
   color: var(--primary);
+}
+
+@media (max-width: 940px) {
+  .nav-landing .nav-links {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
