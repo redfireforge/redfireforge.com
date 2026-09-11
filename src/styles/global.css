@@ -90,9 +90,42 @@ a {
   margin-left: auto;
 }
 
-.nav-links a:hover,
-.nav-links a[aria-current='page'] {
+.nav-links a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 64px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.nav-links a:hover {
   color: var(--text);
+}
+
+.nav-links a[aria-current='page'],
+.nav-links a[aria-current='location'] {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.nav-links a[aria-current='page']::after,
+.nav-links a[aria-current='location']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--ember);
+  border-radius: 2px 2px 0 0;
+}
+
+.nav-cta .lp-btn[aria-current='page'],
+.nav-cta .lp-btn[aria-current='location'] {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, white 22%, var(--ember)),
+    0 4px 18px color-mix(in srgb, var(--ember) 30%, transparent);
 }
 
 .nav-landing .nav-inner {
