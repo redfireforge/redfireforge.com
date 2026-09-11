@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { detectOSTarget, platformLabel } from '../utils/detectOS';
 import {
   fetchLatestRelease,
@@ -9,12 +9,26 @@ import {
   type LatestRelease,
 } from '../utils/githubRelease';
 import { DownloadPanel } from '../components/DownloadPanel';
+import { SiteNav } from '../components/SiteNav';
 import '../styles/landing.css';
 
 const GITHUB_REPO = 'https://github.com/redfireforge/redfireforge-public';
 const GITHUB_RELEASES = 'https://github.com/redfireforge/redfireforge-public/releases';
 const APP_URL = 'https://app.redfireforge.com';
 const DEMO_URL = 'https://demo.redfireforge.com';
+
+function useScrollToHash() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+    const id = decodeURIComponent(hash.slice(1));
+    const scroll = () => document.getElementById(id)?.scrollIntoView();
+    scroll();
+    const frame = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(frame);
+  }, [hash]);
+}
 
 // ── compact hook for embedded download section ──────────────
 
@@ -38,33 +52,6 @@ function useLatestRelease() {
 }
 
 // ── sub-components ──────────────────────────────────────────
-
-function LandingNav() {
-  return (
-    <nav className="nav nav-landing">
-      <div className="nav-inner">
-        <Link to="/" className="logo">
-          <span className="logo-mark" aria-hidden>🔥</span>
-          <span>RedfireForge</span>
-        </Link>
-        <div className="nav-links">
-          <a href="#features">Features</a>
-          <a href="#protocols">Protocols</a>
-          <a href="#compare">Compare</a>
-          <a href="#surfaces">Web vs Desktop</a>
-          <a href="#cli">CLI</a>
-          <Link to="/contact">Contact</Link>
-        </div>
-        <div className="nav-cta">
-          <a href={GITHUB_REPO} className="lp-btn lp-btn-ghost lp-btn-sm" target="_blank" rel="noopener noreferrer">
-            ★ GitHub
-          </a>
-          <a href="#download" className="lp-btn lp-btn-primary lp-btn-sm">↓ Download</a>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 function Hero() {
   const { release, detected, primaryUrl, primaryName } = useLatestRelease();
@@ -754,9 +741,11 @@ function SiteFooter() {
 // ── main export ──────────────────────────────────────────────
 
 export function LandingPage() {
+  useScrollToHash();
+
   return (
     <>
-      <LandingNav />
+      <SiteNav />
       <Hero />
       <StatsStrip />
       <ProblemSection />
