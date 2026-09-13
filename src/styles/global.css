@@ -76,10 +76,16 @@ a {
   width: 28px;
   height: 28px;
   border-radius: 7px;
-  background: linear-gradient(140deg, var(--ember), var(--ember-deep));
+  background: var(--ember);
   display: grid;
   place-items: center;
-  font-size: 15px;
+  flex: 0 0 auto;
+}
+
+.logo-mark svg {
+  width: 80%;
+  height: 80%;
+  display: block;
 }
 
 .nav-links {
