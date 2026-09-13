@@ -1,7 +1,10 @@
 {
   "rewrites": [
     { "source": "/dl/:tag/:file", "destination": "/api/dl?tag=:tag&file=:file" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/((?!api/|.*\\.(?:svg|png|ico|jpg|jpeg|gif|webp|xml|txt|json|js|css|map|woff2?)).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
