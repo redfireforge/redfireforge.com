@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { BrandMark } from './BrandMark';
 import '../styles/landing.css';
 
 const GITHUB_REPO = 'https://github.com/redfireforge/redfireforge-public';
@@ -92,7 +93,7 @@ export function SiteNav() {
     <nav className="nav nav-landing">
       <div className="nav-inner">
         <Link to="/" className="logo">
-          <span className="logo-mark" aria-hidden>🔥</span>
+          <BrandMark className="logo-mark" />
           <span>RedfireForge</span>
         </Link>
         <div className="nav-links">

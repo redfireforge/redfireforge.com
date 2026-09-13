@@ -8,6 +8,7 @@ import {
   formatReleaseDate,
   type LatestRelease,
 } from '../utils/githubRelease';
+import { BrandMark } from '../components/BrandMark';
 import { DownloadPanel } from '../components/DownloadPanel';
 import { SiteNav } from '../components/SiteNav';
 import '../styles/landing.css';
@@ -161,7 +162,7 @@ function ProblemSection() {
           <div className="swap-col after">
             <div className="swap-title">With RedfireForge — one workbench</div>
             <div className="one-tool">
-              <div className="one-tool-logo" aria-hidden>🔥</div>
+              <BrandMark className="one-tool-logo" />
               <div className="one-tool-name">RedfireForge</div>
               <div className="one-tool-chips">
                 {['HTTP', 'GraphQL', 'gRPC', 'WebSocket', 'SSE', 'Kafka', 'Load testing', 'Mock server', 'CLI'].map((c) => (
@@ -687,7 +688,7 @@ function SiteFooter() {
         <div className="footer-grid">
           <div className="footer-brand">
             <Link to="/" className="logo">
-              <span className="logo-mark" aria-hidden>🔥</span>
+              <BrandMark className="logo-mark" />
               <span>RedfireForge</span>
             </Link>
             <p>
