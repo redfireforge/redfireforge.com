@@ -110,6 +110,12 @@ export function SiteNav() {
               </a>
             );
           })}
+          <Link
+            to="/download"
+            aria-current={onDownloadPage ? 'page' : undefined}
+          >
+            Download
+          </Link>
           <Link to="/contact" aria-current={onContact ? 'page' : undefined}>
             Contact
           </Link>
